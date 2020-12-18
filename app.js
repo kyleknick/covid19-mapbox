@@ -6,7 +6,9 @@ const mapbox_token =
 mapboxgl.accessToken = mapbox_token;
 var map = new mapboxgl.Map({
 container: 'map',
-style: 'mapbox://styles/mapbox/streets-v11'
+style: 'mapbox://styles/mapbox/dark-v10',
+zoom: 10,
+center: [-97.8, 30.3]
 });
 
 fetch("https://data.austintexas.gov/resource/4p54-9544.json")
@@ -15,7 +17,9 @@ fetch("https://data.austintexas.gov/resource/4p54-9544.json")
     console.log('data is', data);
 
     data.forEach(data => {
-            const { address, typeofcomplaint } = data;
-            console.log(address, typeofcomplaint);
-        });
+            const { geocoded_column, typeofcomplaint } = data;
+            const coordinates = geocoded_column.coordinates;
+            console.log(coordinates, typeofcomplaint);
+            new mapboxgl.Marker({}).setLngLat(coordinates).addTo(map);
+        })
     });
